@@ -8,3 +8,14 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<table>
+    @foreach (var order in Model.orders)
+    {
+        <tr>
+            <td>@order.CustomerId</td>
+            <td>@order.Products.First().Name</td>
+            <td>@order.Products.First().Price</td>
+        </tr>
+    }
+</table>
