@@ -16,7 +16,7 @@ namespace ThAmCo.Staff.Services
                     {
                         new Product
                         {
-                            Name = "Banana",
+                            Name = "Strawberry",
                             Price = 0.50f
                         }
                     }
