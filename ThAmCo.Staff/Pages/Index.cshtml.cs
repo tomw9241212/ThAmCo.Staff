@@ -8,18 +8,18 @@ namespace ThAmCo.Staff.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private OrdersFakeService _ordersFakeService;
+        private IOrdersService _ordersService;
         public List<Order> orders = new();
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, IOrdersService ordersService)
         {
             _logger = logger;
-            _ordersFakeService = new OrdersFakeService();
+            _ordersService = ordersService;
         }
 
         public void OnGet()
         {
-            orders = _ordersFakeService.GetOrdersAsync();
+            orders = _ordersService.GetOrdersAsync().Result.ToList();
         }
     }
 }

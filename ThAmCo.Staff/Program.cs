@@ -1,3 +1,5 @@
+using ThAmCo.Staff.Services;
+
 namespace ThAmCo.Staff
 {
     public class Program
@@ -6,7 +8,14 @@ namespace ThAmCo.Staff
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            if (builder.Environment.IsDevelopment()) {
+                builder.Services.AddTransient<IOrdersService, FakeOrdersService>();
+            } else {
+                builder.Services.AddHttpClient<IOrdersService, OrdersService>();
+            }
+
             // Add services to the container.
+            // TODO: Change from razor to controllers
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
