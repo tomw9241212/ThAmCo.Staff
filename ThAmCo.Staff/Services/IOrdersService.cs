@@ -4,8 +4,8 @@ namespace ThAmCo.Staff.Services
 {
     public interface IOrdersService
     {
-        public Task<IEnumerable<Order>> GetOrdersAsync();
-        public Task<Order> GetOrderAsync(int id);
+        public Task<IEnumerable<OrderGetDto>> GetOrdersAsync();
+        public Task<OrderGetDto> GetOrderAsync(int id);
 
     }
 }

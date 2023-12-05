@@ -2,16 +2,15 @@
 
 namespace ThAmCo.Staff.Services {
     public class FakeOrdersService : IOrdersService {
-        private readonly List<Order> _orders = new()
-    {
-            new Order { Id = 1, CustomerId = 1, RequestedDate = DateTime.Now, Products = new List<Product>
-                    { new Product { Name = "Strawberry", Price = 0.50f } } },
+        private readonly List<OrderGetDto> _orders = new() {
+            new OrderGetDto { Id = 1, CustomerId = 1, SubmittedDate = DateTime.Now, OrderDetails = new List<OrderDetail>
+                    { new OrderDetail { OrderId = 1, ProductId = 1, Quantity = 10, UnitPrice = 0.05f } } },
         };
-        public async Task<IEnumerable<Order>> GetOrdersAsync() {       
+        public async Task<IEnumerable<OrderGetDto>> GetOrdersAsync() {       
             return await Task.FromResult(_orders);
         }
 
-        public async Task<Order> GetOrderAsync(int id) {
+        public async Task<OrderGetDto> GetOrderAsync(int id) {
             var order = _orders.FirstOrDefault(x => x.Id == id);
             return await Task.FromResult(order);
         }

@@ -9,7 +9,8 @@ namespace ThAmCo.Staff.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private IOrdersService _ordersService;
-        public List<Order> orders = new();
+        public List<OrderGetDto> orders = new();
+        public OrderGetDto order = new();
 
         public IndexModel(ILogger<IndexModel> logger, IOrdersService ordersService)
         {
@@ -20,6 +21,7 @@ namespace ThAmCo.Staff.Pages
         public void OnGet()
         {
             orders = _ordersService.GetOrdersAsync().Result.ToList();
+            //order = _ordersService.GetOrderAsync(1).Result;
         }
     }
 }
