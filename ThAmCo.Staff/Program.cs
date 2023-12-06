@@ -1,3 +1,4 @@
+using Auth0.AspNetCore.Authentication;
 using ThAmCo.Staff.Services;
 
 namespace ThAmCo.Staff
@@ -8,11 +9,17 @@ namespace ThAmCo.Staff
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            if (builder.Environment.IsDevelopment()) {
+            if (builder.Configuration.GetValue<bool>("WebServices:Orders:UseFake", false)) {
                 builder.Services.AddTransient<IOrdersService, FakeOrdersService>();
             } else {
-                builder.Services.AddHttpClient<IOrdersService, OrdersService>();
+                builder.Services.AddHttpClient<IOrdersService>();
+                builder.Services.AddTransient<IOrdersService, OrdersService>();
             }
+
+            builder.Services.AddAuth0WebAppAuthentication(options => {
+                options.Domain = builder.Configuration["Auth:Domain"];
+                options.ClientId = builder.Configuration["Auth:ClientId"];
+            });
 
             // Add services to the container.
             // TODO: Change from razor to controllers
@@ -33,6 +40,7 @@ namespace ThAmCo.Staff
 
             app.UseRouting();
 
+            //app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();

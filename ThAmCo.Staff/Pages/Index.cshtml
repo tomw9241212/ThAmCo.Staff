@@ -13,8 +13,10 @@
     @foreach (var order in Model.orders)
     {
         <tr>
+            <td>@order.Id</td>
+            <td>@order.Status</td>
             <td>@order.CustomerId</td>
-            <td>@order.RequestedDate</td>
+            <td>@order.SubmittedDate</td>
         </tr>
     }
 </table>
