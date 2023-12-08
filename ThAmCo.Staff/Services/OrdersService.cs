@@ -11,17 +11,18 @@ namespace ThAmCo.Staff.Services {
 
         record TokenDto(string access_token, string token_type, int expires_in);
 
-        public OrdersService(IHttpClientFactory clientFactory, 
+        public OrdersService(IHttpClientFactory clientFactory,
                              IConfiguration configuration) {
             _clientFactory = clientFactory;
             _configuration = configuration;
         }
-        public async Task<OrderGetDto> GetOrderAsync(int id)
-        {
-            throw new NotImplementedException();
-            //var response = await _client.GetAsync($"api/Orders/{id}");
-            //response.EnsureSuccessStatusCode();
-            //return await response.Content.ReadFromJsonAsync<Order>();
+        public async Task<OrderGetDto> GetOrderAsync(int id) {
+            var ordersClient = _clientFactory.CreateClient();
+            var serviceBaseAddress = _configuration["WebServices:Orders:BaseAddress"];
+            ordersClient.BaseAddress = new Uri(serviceBaseAddress);
+            var response = await ordersClient.GetAsync($"api/Orders/{id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<OrderGetDto>();
         }
 
         public async Task<IEnumerable<OrderGetDto>> GetOrdersAsync() {

@@ -4,10 +4,8 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<h3>Orders</h3>
 
 <table>
     @foreach (var order in Model.orders)
@@ -19,4 +17,15 @@
             <td>@order.SubmittedDate</td>
         </tr>
     }
+</table>
+
+<h3>Order Id 1</h3>
+
+<table>
+    <tr>
+        <td>@Model.order.Id</td>
+        <td>@Model.order.Status</td>
+        <td>@Model.order.CustomerId</td>
+        <td>@Model.order.SubmittedDate</td>
+    </tr>
 </table>

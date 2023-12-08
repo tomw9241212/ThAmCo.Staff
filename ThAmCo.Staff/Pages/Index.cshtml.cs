@@ -21,7 +21,7 @@ namespace ThAmCo.Staff.Pages
         public void OnGet()
         {
             orders = _ordersService.GetOrdersAsync().Result.ToList();
-            //order = _ordersService.GetOrderAsync(1).Result;
+            order = _ordersService.GetOrderAsync(1).Result;
         }
     }
 }
