@@ -7,32 +7,17 @@ namespace ThAmCo.Staff.Services {
 
         private readonly IHttpClientFactory _clientFactory;
         private readonly IConfiguration _configuration;
+        private TokenDto _token;
+        private DateTime _tokenExpiration;
 
         record TokenDto(string access_token, string token_type, int expires_in);
 
-        public OrdersService(IHttpClientFactory clientFactory,
-                             IConfiguration configuration) {
-            _clientFactory = clientFactory;
-            _configuration = configuration;
-        }
-        public async Task<OrderGetDto?> GetOrderAsync(int id) {
-            var ordersClient = _clientFactory.CreateClient();
-            var serviceBaseAddress = _configuration["WebServices:Orders:BaseAddress"];
-            ordersClient.BaseAddress = new Uri(serviceBaseAddress);
-            var response = await ordersClient.GetAsync($"api/Orders/{id}");
-
-            if (response.StatusCode == HttpStatusCode.NotFound) {
-                return null;
+        private async Task<string> GetOrRefreshTokenAsync() {
+            if (_token != null && DateTime.UtcNow < _tokenExpiration) {
+                return _token.access_token;
             }
 
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsAsync<OrderGetDto>();
-        }
-
-        public async Task<List<OrderGetDto>> GetOrdersAsync() {
             var tokenClient = _clientFactory.CreateClient();
-
             var authBaseAddress = _configuration["Auth:Authority"];
             tokenClient.BaseAddress = new Uri(authBaseAddress);
 
@@ -47,13 +32,42 @@ namespace ThAmCo.Staff.Services {
             var tokenForm = new FormUrlEncodedContent(tokenValues);
             var tokenResponse = await tokenClient.PostAsync("oauth/token", tokenForm);
             tokenResponse.EnsureSuccessStatusCode();
-            var tokenInfo = await tokenResponse.Content.ReadFromJsonAsync<TokenDto>();
+
+            _token = await tokenResponse.Content.ReadFromJsonAsync<TokenDto>();
+            _tokenExpiration = DateTime.UtcNow.AddSeconds(_token.expires_in);
+            return _token.access_token;
+        }
+
+        public OrdersService(IHttpClientFactory clientFactory,
+                             IConfiguration configuration) {
+            _clientFactory = clientFactory;
+            _configuration = configuration;
+        }
+
+        public async Task<OrderGetDto?> GetOrderAsync(int id) {
+            var ordersClient = _clientFactory.CreateClient();
+            var serviceBaseAddress = _configuration["WebServices:Orders:BaseAddress"];
+            ordersClient.BaseAddress = new Uri(serviceBaseAddress);
+            ordersClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", await GetOrRefreshTokenAsync());
+            var response = await ordersClient.GetAsync($"api/Orders/{id}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound) {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<OrderGetDto>();
+        }
+
+        public async Task<List<OrderGetDto>> GetOrdersAsync() {
 
             var ordersClient = _clientFactory.CreateClient();
             var serviceBaseAddress = _configuration["WebServices:Orders:BaseAddress"];
             ordersClient.BaseAddress = new Uri(serviceBaseAddress);
             ordersClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", tokenInfo?.access_token);
+                new AuthenticationHeaderValue("Bearer", await GetOrRefreshTokenAsync());
 
             var response = await ordersClient.GetAsync("api/Orders");
             response.EnsureSuccessStatusCode();
