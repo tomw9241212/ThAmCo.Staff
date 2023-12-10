@@ -10,19 +10,24 @@ namespace ThAmCo.Staff.Services {
         private TokenDto _token;
         private DateTime _tokenExpiration;
 
+        // Returned from the Auth0 endpoint
         record TokenDto(string access_token, string token_type, int expires_in);
 
+        public OrdersService(IHttpClientFactory clientFactory,
+                             IConfiguration configuration) {
+            _clientFactory = clientFactory;
+            _configuration = configuration;
+        }
+
         private async Task<string> GetOrRefreshTokenAsync() {
+            // Check if token already exists this session
             if (_token != null && DateTime.UtcNow < _tokenExpiration) {
                 return _token.access_token;
             }
 
-            var tokenClient = _clientFactory.CreateClient();
-            var authBaseAddress = _configuration["Auth:Authority"];
-            tokenClient.BaseAddress = new Uri(authBaseAddress);
+            var tokenClient = _clientFactory.CreateClient("TokenClient");
 
-            var tokenValues = new Dictionary<string, string>
-            {
+            var tokenValues = new Dictionary<string, string> {
                 { "grant_type", "client_credentials" },
                 { "client_id", _configuration["Auth:ClientId"] },
                 { "client_secret", _configuration["Auth:ClientSecret"] },
@@ -34,18 +39,13 @@ namespace ThAmCo.Staff.Services {
             tokenResponse.EnsureSuccessStatusCode();
 
             _token = await tokenResponse.Content.ReadFromJsonAsync<TokenDto>();
+            // Update expiration
             _tokenExpiration = DateTime.UtcNow.AddSeconds(_token.expires_in);
             return _token.access_token;
         }
 
-        public OrdersService(IHttpClientFactory clientFactory,
-                             IConfiguration configuration) {
-            _clientFactory = clientFactory;
-            _configuration = configuration;
-        }
-
         public async Task<OrderGetDto?> GetOrderAsync(int id) {
-            var ordersClient = _clientFactory.CreateClient();
+            var ordersClient = _clientFactory.CreateClient("OrdersClient");
             var serviceBaseAddress = _configuration["WebServices:Orders:BaseAddress"];
             ordersClient.BaseAddress = new Uri(serviceBaseAddress);
             ordersClient.DefaultRequestHeaders.Authorization =
@@ -63,9 +63,7 @@ namespace ThAmCo.Staff.Services {
 
         public async Task<List<OrderGetDto>> GetOrdersAsync() {
 
-            var ordersClient = _clientFactory.CreateClient();
-            var serviceBaseAddress = _configuration["WebServices:Orders:BaseAddress"];
-            ordersClient.BaseAddress = new Uri(serviceBaseAddress);
+            var ordersClient = _clientFactory.CreateClient("OrdersClient");
             ordersClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", await GetOrRefreshTokenAsync());
 
