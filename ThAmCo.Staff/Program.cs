@@ -5,7 +5,7 @@ using ThAmCo.Staff.Services;
 
 namespace ThAmCo.Staff {
     public class Program {
-
+      
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +49,7 @@ namespace ThAmCo.Staff {
 
             app.UseRouting();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();
