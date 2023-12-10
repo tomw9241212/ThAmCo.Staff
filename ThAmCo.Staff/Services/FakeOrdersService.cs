@@ -6,7 +6,7 @@ namespace ThAmCo.Staff.Services {
             new OrderGetDto { Id = 1, CustomerId = 1, SubmittedDate = DateTime.Now, OrderDetails = new List<OrderDetail>
                     { new OrderDetail { OrderId = 1, ProductId = 1, Quantity = 10, UnitPrice = 0.05f } } },
         };
-        public async Task<IEnumerable<OrderGetDto>> GetOrdersAsync() {       
+        public async Task<List<OrderGetDto>> GetOrdersAsync() {
             return await Task.FromResult(_orders);
         }
 

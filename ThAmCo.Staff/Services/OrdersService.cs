@@ -1,6 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
 using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using ThAmCo.Staff.Models;
 
 namespace ThAmCo.Staff.Services {
@@ -16,16 +15,22 @@ namespace ThAmCo.Staff.Services {
             _clientFactory = clientFactory;
             _configuration = configuration;
         }
-        public async Task<OrderGetDto> GetOrderAsync(int id) {
+        public async Task<OrderGetDto?> GetOrderAsync(int id) {
             var ordersClient = _clientFactory.CreateClient();
             var serviceBaseAddress = _configuration["WebServices:Orders:BaseAddress"];
             ordersClient.BaseAddress = new Uri(serviceBaseAddress);
             var response = await ordersClient.GetAsync($"api/Orders/{id}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound) {
+                return null;
+            }
+
             response.EnsureSuccessStatusCode();
+
             return await response.Content.ReadAsAsync<OrderGetDto>();
         }
 
-        public async Task<IEnumerable<OrderGetDto>> GetOrdersAsync() {
+        public async Task<List<OrderGetDto>> GetOrdersAsync() {
             var tokenClient = _clientFactory.CreateClient();
 
             var authBaseAddress = _configuration["Auth:Authority"];
@@ -53,7 +58,7 @@ namespace ThAmCo.Staff.Services {
             var response = await ordersClient.GetAsync("api/Orders");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsAsync<IEnumerable<OrderGetDto>>();
+            return await response.Content.ReadAsAsync<List<OrderGetDto>>();
         }
     }
 }
