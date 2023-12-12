@@ -1,0 +1,14 @@
+﻿@page
+@model ThAmCo.Staff.Pages.Orders.ToDispatchModel
+@{
+}
+<table>
+    @foreach (var order in Model.ordersToDispatch) {
+        <tr>
+            <td>@order.Id</td>
+            <td>@order.Status</td>
+            <td>@order.CustomerId</td>
+            <td>@order.SubmittedDate</td>
+        </tr>
+    }
+</table>

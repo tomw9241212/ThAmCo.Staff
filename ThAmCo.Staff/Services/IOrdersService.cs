@@ -5,5 +5,7 @@ namespace ThAmCo.Staff.Services {
         public Task<List<OrderGetDto>> GetOrdersAsync();
         public Task<OrderGetDto> GetOrderAsync(int id);
 
+        public Task<List<OrderGetDto>> GetOrdersByStatusAsync(OrderStatus orderStatus);
+
     }
 }
