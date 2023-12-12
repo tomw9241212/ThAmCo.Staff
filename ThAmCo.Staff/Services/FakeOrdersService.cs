@@ -15,5 +15,10 @@ namespace ThAmCo.Staff.Services {
             return await Task.FromResult(order);
         }
 
+        public async Task<List<OrderGetDto>> GetOrdersByStatusAsync(OrderStatus orderStatus) {
+            var orders = _orders.Where(x => x.Status == orderStatus);
+            return await Task.FromResult(orders.ToList());
+        }
+
     }
 }

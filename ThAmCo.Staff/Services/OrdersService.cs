@@ -61,6 +61,7 @@ namespace ThAmCo.Staff.Services {
             return await response.Content.ReadAsAsync<OrderGetDto>();
         }
 
+
         public async Task<List<OrderGetDto>> GetOrdersAsync() {
 
             var ordersClient = _clientFactory.CreateClient("OrdersClient");
@@ -72,5 +73,18 @@ namespace ThAmCo.Staff.Services {
 
             return await response.Content.ReadAsAsync<List<OrderGetDto>>();
         }
+
+        public async Task<List<OrderGetDto>> GetOrdersByStatusAsync(OrderStatus status) {
+
+            var ordersClient = _clientFactory.CreateClient("OrdersClient");
+            ordersClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", await GetOrRefreshTokenAsync());
+
+            var response = await ordersClient.GetAsync($"api/Orders?orderStatus={status}");
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<OrderGetDto>>();
+        }
+
     }
 }
