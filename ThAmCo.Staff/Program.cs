@@ -5,17 +5,20 @@ using ThAmCo.Staff.Services;
 
 namespace ThAmCo.Staff {
     public class Program {
-      
+
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Always implement fake customer service
+            builder.Services.AddTransient<ICustomerService, FakeCustomerService>();
+
             if (builder.Configuration.GetValue<bool>("WebServices:Orders:UseFake", false)) {
                 builder.Services.AddTransient<IOrdersService, FakeOrdersService>();
+
             } else {
                 builder.Services.AddHttpClient("TokenClient", client => {
                     client.BaseAddress = new Uri(builder.Configuration["Auth:Authority"]);
                 });
-
 
                 builder.Services.AddHttpClient("OrdersClient", client => {
                     client.BaseAddress = new Uri(builder.Configuration["WebServices:Orders:BaseAddress"]);

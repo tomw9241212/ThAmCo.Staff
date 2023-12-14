@@ -20,5 +20,9 @@ namespace ThAmCo.Staff.Services {
             return await Task.FromResult(orders.ToList());
         }
 
+        public async Task UpdateOrderStatusAsync(int id, OrderUpdateDto orderUpdateDto) {
+            return;
+        }
+
     }
 }
