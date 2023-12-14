@@ -86,5 +86,16 @@ namespace ThAmCo.Staff.Services {
             return await response.Content.ReadAsAsync<List<OrderGetDto>>();
         }
 
+        public async Task UpdateOrderStatusAsync(int id, OrderUpdateDto orderUpdateDto) {
+            var ordersClient = _clientFactory.CreateClient("OrdersClient");
+            ordersClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", await GetOrRefreshTokenAsync());
+
+            var response = await ordersClient.PatchAsJsonAsync($"api/Orders/{id}/status", orderUpdateDto);
+            response.EnsureSuccessStatusCode();
+
+            return;
+        }
+
     }
 }

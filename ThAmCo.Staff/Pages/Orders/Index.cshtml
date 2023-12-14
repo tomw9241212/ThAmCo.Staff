@@ -5,24 +5,25 @@
 
 <h3>Orders</h3>
 
-<table>
-    @foreach (var order in Model.orders) {
+<table class="table">
+    <thead>
         <tr>
-            <td>@order.Id</td>
-            <td>@order.Status</td>
-            <td>@order.CustomerId</td>
-            <td>@order.SubmittedDate</td>
+            <th>Order Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Date Submitted</th>
         </tr>
-    }
-</table>
-
-<h3>Order Id 1</h3>
-
-<table>
-    <tr>
-        <td>@Model.order.Id</td>
-        <td>@Model.order.Status</td>
-        <td>@Model.order.CustomerId</td>
-        <td>@Model.order.SubmittedDate</td>
-    </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders) {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.CustomerName</td>
+                <td>@order.CustomerEmail</td>
+                <td>@order.OrderStatus</td>
+                <td>@order.SubmittedDate</td>
+            </tr>
+        }
+    </tbody>
 </table>
