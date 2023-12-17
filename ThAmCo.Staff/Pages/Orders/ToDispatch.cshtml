@@ -13,6 +13,7 @@
             <th>Email</th>
             <th>Status</th>
             <th>Date Submitted</th>
+            <th>Last Updated</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -24,6 +25,7 @@
                 <td>@order.CustomerEmail</td>
                 <td>@order.OrderStatus</td>
                 <td>@order.SubmittedDate.ToString("yyyy-MM-dd")</td>
+                <td>@order.UpdatedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>
                     <form method="post" asp-page-handler="DispatchOrder" asp-route-orderId="@order.OrderId">
                         <button type="submit" class="btn btn-primary">Dispatch</button>

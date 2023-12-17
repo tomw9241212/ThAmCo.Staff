@@ -25,7 +25,8 @@ namespace ThAmCo.Staff.Pages.Orders {
                     CustomerName = customer?.Name,
                     CustomerEmail = customer?.EmailAddress,
                     OrderStatus = order.Status,
-                    SubmittedDate = order.SubmittedDate
+                    SubmittedDate = order.SubmittedDate,
+                    UpdatedDate = order.UpdatedDate
                 });
             }
         }
