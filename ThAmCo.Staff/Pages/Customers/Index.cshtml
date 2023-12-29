@@ -1,0 +1,43 @@
+﻿@page
+@model ThAmCo.Staff.Pages.Customers.IndexModel
+@{
+}
+
+<h3>Customers</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Customer Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Telephone Number</th>
+            <th>Address</th>
+            <th>Balance</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Customers) {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.Name</td>
+                <td>@customer.EmailAddress</td>
+                <td>@customer.PhoneNumber</td>
+                <td>@customer.AddressLine1 @customer.PostCode</td>
+                @* Format as currency *@
+                <td>@customer.AvailableFunds.ToString("C2")</td>
+                <td>
+                    <form method="post" asp-page-handler="DeleteCustomer" asp-route-id="@customer.Id">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    @if (TempData["ErrorMessage"] != null) {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
