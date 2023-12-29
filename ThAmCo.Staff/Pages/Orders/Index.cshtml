@@ -1,0 +1,29 @@
+﻿@page
+@model ThAmCo.Staff.Pages.Orders.IndexModel
+@{
+}
+
+<h3>Orders</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Date Submitted</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders) {
+            <tr>
+                <td>@order.OrderId</td>
+                <td>@order.CustomerName</td>
+                <td>@order.CustomerEmail</td>
+                <td>@order.OrderStatus</td>
+                <td>@order.SubmittedDate</td>
+            </tr>
+        }
+    </tbody>
+</table>
