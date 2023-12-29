@@ -45,7 +45,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PACKAGE }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
   deploy-prod:
     runs-on: windows-latest
@@ -61,5 +61,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME_PROD }}
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PACKAGE_PROD }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
