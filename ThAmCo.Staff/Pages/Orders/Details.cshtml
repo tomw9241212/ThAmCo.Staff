@@ -1,0 +1,45 @@
+﻿@page "{id:int}"
+@model ThAmCo.Staff.Pages.Orders.DetailsModel
+@{
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Date Submitted</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Order.OrderId</td>
+            <td>@Model.Order.CustomerName</td>
+            <td>@Model.Order.CustomerEmail</td>
+            <td>@Model.Order.OrderStatus</td>
+            <td>@Model.Order.SubmittedDate</td>
+            <td>@Model.Order.OrderDetails.Sum(x => x.UnitPrice)</td>
+        </tr>
+    </tbody>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderDetail in Model.Order.OrderDetails) {
+            <td>@orderDetail.ProductId</td>
+            <td>@orderDetail.UnitPrice</td>
+            <td>@orderDetail.Quantity</td>
+            <td>@orderDetail.TotalPrice</td>
+        }
+    </tbody>
+</table>
