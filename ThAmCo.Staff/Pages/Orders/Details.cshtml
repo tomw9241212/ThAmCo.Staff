@@ -21,14 +21,15 @@
             <td>@Model.Order.CustomerEmail</td>
             <td>@Model.Order.OrderStatus</td>
             <td>@Model.Order.SubmittedDate</td>
-            <td>@Model.Order.OrderDetails.Sum(x => x.UnitPrice)</td>
+            <td>@Model.Order.OrderDetails.Sum(x => x.UnitPrice).ToString("C2")</td>
         </tr>
     </tbody>
 </table>
 <table class="table">
     <thead>
         <tr>
-            <th>Product Name</th>
+            <th>Product</th>
+            <th>Description</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Total</th>
@@ -36,10 +37,17 @@
     </thead>
     <tbody>
         @foreach (var orderDetail in Model.Order.OrderDetails) {
-            <td>@orderDetail.ProductId</td>
-            <td>@orderDetail.UnitPrice</td>
-            <td>@orderDetail.Quantity</td>
-            <td>@orderDetail.TotalPrice</td>
+            <tr>
+                <td>@orderDetail.Product.Name</td>
+                <td>@orderDetail.Product.Description</td>
+                <td>@orderDetail.UnitPrice.ToString("C2")</td>
+                <td>@orderDetail.Quantity</td>
+                <td>@orderDetail.TotalPrice.ToString("C2")</td>
+            </tr>
         }
+        
     </tbody>
 </table>
+
+<h3>Notes</h3>
+<p>@Model.Order.Notes</p>

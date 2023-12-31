@@ -13,6 +13,7 @@
             <th>Email</th>
             <th>Status</th>
             <th>Date Submitted</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +24,7 @@
                 <td>@order.CustomerEmail</td>
                 <td>@order.OrderStatus</td>
                 <td>@order.SubmittedDate</td>
+                <td><a asp-page="Details" asp-route-id="@order.OrderId">Details</a></td>
             </tr>
         }
     </tbody>

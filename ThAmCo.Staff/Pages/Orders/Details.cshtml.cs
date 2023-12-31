@@ -21,6 +21,7 @@ namespace ThAmCo.Staff.Pages.Orders {
             var customer = await _customerService.GetCustomerAsync(order.CustomerId);
             Order = new OrderDetailViewModel {
                 OrderId = order.Id,
+                Notes = order.Notes,
                 CustomerName = customer?.Name ?? "",
                 CustomerEmail = customer?.EmailAddress ?? "",
                 OrderStatus = order.Status,
